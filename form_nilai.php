@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<?php
+<?php 
   require_once 'fungsiku.php';
 ?>
-<html lang="id">
+<html>
 <head>
-  <title>Form Nilai</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-
-<h2>Form Nilai Mahasiswa</h2>
-
-<fieldset style="border:1px solid black">
-    <legend>Silahkan isi form di bawah ini:</legend>
+<h3>Form Nilai Mahasiswa</h3>
 <?php 
-   $data_matkul = [
-    'WEB1' => 'Pemrograman Web 1',
-    'WEB2' => 'Pemrograman Web 2',
-    'BASDAT' => 'Basis Data',
-    'UI/UX' => 'UI/UX',
-    'JARKOM' => 'Jaringan Komputer',
-   ];
+    $ar_matkul = [
+        'DDP'=>'Dasar-Dasar Pemrograman',
+        'WEB1'=>'Pemrograman Web 1',
+        'WEB2'=>'Pemrograman Web 2',
+        'BASDAT'=>'Basis Data',
+        'UI/UX'=>'UI/UX',
+        "JARKOM"=>"Jaringan Komputer",
+        "SE"=>"Sistem Enterprise",
+    ];
 ?>
-
-<form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   <div class="form-group row">
     <label for="nama" class="col-4 col-form-label">Nama Lengkap</label> 
     <div class="col-8">
@@ -42,11 +38,12 @@
     <label for="matkul" class="col-4 col-form-label">Mata Kuliah</label> 
     <div class="col-8">
       <select id="matkul" name="matkul" class="custom-select">
-        <?php 
-            foreach ($data_matkul as $key => $value) {
-                echo "<option value='$key'>$value</option>";
-            }
-        ?>
+        <option value="0">-- Pilih Mata Kuliah --</option>
+<?php 
+    foreach($ar_matkul as $kode=>$matkul){
+        echo "<option value='$kode'>$matkul</option>";
+    }
+?>
       </select>
     </div>
   </div>
@@ -63,7 +60,7 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="nilai_tugas" class="col-4 col-form-label">Nilai Tugas/Praktikum</label> 
+    <label for="nilai_tugas" class="col-4 col-form-label">Tugas/Praktikum</label> 
     <div class="col-8">
       <input id="nilai_tugas" name="nilai_tugas" type="text" class="form-control">
     </div>
@@ -74,32 +71,28 @@
     </div>
   </div>
 </form>
-</fieldset>
 
+<hr>
 <?php 
+    $_nama = $_POST['nama'];
+    $_matkul = $_POST['matkul'];    
+    $_nilai_uts = $_POST['nilai_uts'];
+    $_nilai_uas = $_POST['nilai_uas'];
+    $_nilai_tugas = $_POST['nilai_tugas'];
 
-$_nama = $_GET['nama'];
-$_matkul = $_GET['matkul'];
-$_nilai_uts = $_GET['nilai_uts'];   
-$_nilai_uas = $_GET['nilai_uas'];
-$_nilai_tugas = $_GET['nilai_tugas'];
-
-if(isset($_nama)) {
-  $_nilai_akhir = hitung_nilai($_nilai_uts, $_nilai_uas, $_nilai_tugas);
-  $_kelulusan = kelulusan($_nilai_akhir);
+    if(isset($_nama)){ 
+    
+    $_nilai_akhir = hitung_nilai($_nilai_uts, $_nilai_uas, $_nilai_tugas);
+    $_ket_lulus = kelulusan($_nilai_akhir);
 ?>
-<h2>Hasil Perhitungan Nilai Mahasiswa</h2>
-Nama Mahasiswa: <?=$_nama; ?><br>
-Mata Kuliah: <?=$data_matkul[$_matkul]; ?><br>
+<h3>Hasil Input Data</h3>
+Nama Mahasiswa: <?=$_nama ?><br>
+Mata Kuliah: <?=$ar_matkul[$_matkul]; ?><br>       
 Nilai UTS: <?=$_nilai_uts; ?><br>
 Nilai UAS: <?=$_nilai_uas; ?><br>
-Nilai Tugas/Praktikum: <?=$_nilai_tugas; ?><br>
+Nilai Tugas: <?=$_nilai_tugas; ?><br>
 Nilai Akhir: <?=$_nilai_akhir; ?><br>
-Kelulusan: <?=$_kelulusan; ?><br>
-
-<?php
-}
+Hasil Kelulusan: <?=$_ket_lulus; ?><br>
 ?>
 </body>
 </html>
-
